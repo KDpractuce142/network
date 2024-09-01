@@ -21,7 +21,7 @@ def create_chat(request):
 def chat(request, chat_id):
     chat = get_object_or_404(Chat, id=chat_id)
     messages = Message.objects.filter(chat=chat)
-    message = MessageForm()
+    form = MessageForm()
 
     if request.method == 'POST':
         form = MessageForm(request.POST)
@@ -38,6 +38,12 @@ def chat(request, chat_id):
         'message': messages,
         'form': form,
     })
+
+def profile(request):
+    user = request.user
+    userdata = UserData.objects.filter(user=user)
+
+
 
 
 def post_list(request):

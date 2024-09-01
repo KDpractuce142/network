@@ -11,3 +11,8 @@ class ChatAdmin(admin.ModelAdmin):
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('desk', 'created_by', 'created_at', 'chat_id')
     search_fields = ('desk', 'created_by')
+
+@admin.register(Publication)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('desk', 'created_by', 'created_at')
+    search_fields = ('created_by', 'created_at')

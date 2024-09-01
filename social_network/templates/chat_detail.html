@@ -6,7 +6,7 @@
   <ul>
     {% for message in messages %}
       <li>
-        <strong>{{ message.user.username }}</strong>: {{ message.desk }}
+        <strong>{{ message.created_by.username }}</strong>: {{ message.desk }}
       </li>
     {% endfor %}
   </ul>

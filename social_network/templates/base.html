@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мій Портал{% endblock %}</title>
+    <title>{% block title %}___STOGRAM___{% endblock %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,12 +62,13 @@
 </head>
 <body>
     <header>
+        <strong><a href="{% url 'post_list' %}">___STOGRAM___</a></strong>
         <nav>
             <ul>
-                <li><a href="">Головна</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="">Профіль: {{ user.username }}</a></li>
                     <li><a href="">Вихід</a></li>
+                    <li><a href="{% url 'chat_list' %}">Чати</a></li>
                 {% else %}
                     <li><a href="">Вхід</a></li>
                     <li><a href="">Реєстрація</a></li>
@@ -80,7 +81,7 @@
         {% endblock %}
     </main>
     <footer>
-        <p>© 2024 Мій Портал</p>
+        <p>© 2024 Соціальна мережа ___STOGRAM___ </p>
     </footer>
 </body>
 </html>
