@@ -16,3 +16,14 @@ class MessageAdmin(admin.ModelAdmin):
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('desk', 'created_by', 'created_at')
     search_fields = ('created_by', 'created_at')
+
+@admin.register(UserData)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'age', 'bio',)
+    search_fields = ('name', 'age')
+
+@admin.register(Like)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('post', 'user',)
+    search_fields = ('post',)
+

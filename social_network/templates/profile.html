@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for userdata in userdatas %}
+    {{ userdata.name }}, {{ userdata.age }}<p>
+        <img src = {{ userdata.photo }} alt = "test">   </p><p>
+    {{ userdata.bio }} </p><p>
+{% endfor %}
+        <h1>Publications</h1>
+        {% for user_post in user_posts %}
+        <li><a href="{% url 'profile' user.id %}">
+            {{ user_post.created_by }}<a>
+            <p>
+            {{ user_post.desk }} </p><p>
+            {{ user_post.created_at}},        
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Create post</button>
+              </form>
+    </p></li>
+        {% endfor %}
+        {% endblock %}

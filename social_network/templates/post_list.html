@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Публікації</h1>
+<h1>    Публікації</h1><p>
+    <a href="{% url 'create_post' %}">  Написати пост</a>
 <ul>
     {% for post in posts %}
-    <li><a href="">
+    <li><a href="{% url 'profile' user.id %}">
         {{ post.created_by }}<a>
         <p>
         {{ post.desk }} </p><p>
-        {{post.created_at}}</p></li>
+        {{post.created_at}},        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Create post</button>
+          </form>
+</p></li>
     {% endfor %}
 </ul>
 {% endblock %}
