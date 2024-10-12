@@ -16,7 +16,8 @@ class Publication(models.Model):
 class Chat(models.Model):
     members=models.ManyToManyField(User, default="1")
     name=models.CharField(max_length=50, default="chat")
-
+    def __str__(self):
+        return self.name
 
 class Message(models.Model):
     chat=models.ForeignKey(Chat, on_delete=models.CASCADE, default="1")

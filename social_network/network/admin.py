@@ -13,17 +13,16 @@ class MessageAdmin(admin.ModelAdmin):
     search_fields = ('desk', 'created_by')
 
 @admin.register(Publication)
-class MessageAdmin(admin.ModelAdmin):
+class PublicationAdmin(admin.ModelAdmin):  # Змінив ім'я класу
     list_display = ('desk', 'created_by', 'created_at')
     search_fields = ('created_by', 'created_at')
 
 @admin.register(UserData)
-class MessageAdmin(admin.ModelAdmin):
+class UserDataAdmin(admin.ModelAdmin):  # Змінив ім'я класу
     list_display = ('name', 'age', 'bio',)
     search_fields = ('name', 'age')
 
 @admin.register(Like)
-class MessageAdmin(admin.ModelAdmin):
+class LikeAdmin(admin.ModelAdmin):  # Змінив ім'я класу
     list_display = ('post', 'user',)
     search_fields = ('post',)
-

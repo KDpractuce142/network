@@ -3,7 +3,7 @@
 {% block content %}
 {% for userdata in userdatas %}
     {{ userdata.name }}, {{ userdata.age }}<p>
-        <img src = {{ userdata.photo }} alt = "test">   </p><p>
+        <img src = {{ userdata.photo.url }} alt = "test">   </p><p>
     {{ userdata.bio }} </p><p>
 {% endfor %}
         <h1>Publications</h1>

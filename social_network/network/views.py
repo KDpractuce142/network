@@ -3,7 +3,7 @@ from .models import User, Chat, Publication, Message, UserData
 from .forms import *
 
 def chat_list(request):
-    chats = Chat.objects.all()
+    chats = Chat.objects.filter(Chat.members in request.user)
     return render(request, 'chat_list.html', {'chats': chats})
 
 def create_chat(request):
@@ -77,7 +77,7 @@ def chat(request, chat_id):
     chat = get_object_or_404(Chat, id=chat_id)
     messages = Message.objects.filter(chat=chat)
     form = MessageForm()
-
+    print(chat)
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -85,14 +85,19 @@ def chat(request, chat_id):
             message.chat = chat
             message.user = request.user
             message.save()
-            return redirect('chat_detail', chat_id=chat.id)
+            return redirect('chat_detail', chat_id=chat.id,)
     is_moderator_or_admin = False
 
     return render(request, 'chat_detail.html', {
         'chat': chat,
         'messages': messages,
         'form': form,
+        'members': chat.members.all(),
     })
+
+
+
+
 
 def profile(request, user_id):
     

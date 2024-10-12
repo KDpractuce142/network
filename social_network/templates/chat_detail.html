@@ -2,6 +2,9 @@
 
 {% block content %}
   <h1>{{ chat.name }}</h1>
+  <h3>members: 
+        <p>{{ chat.members }}</p>
+</h3>
   <h2>Comments</h2>
   <ul>
     {% for message in messages %}

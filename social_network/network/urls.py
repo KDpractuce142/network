@@ -6,7 +6,7 @@ from django.urls import path
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('chats/', views.chat_list, name='chat_list'),
     path('newchat/', views.create_chat, name='chatnew'),
     path('chat<int:chat_id>/', views.chat, name='chat_detail'),
