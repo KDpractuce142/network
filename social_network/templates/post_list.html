@@ -5,16 +5,10 @@
     <a href="{% url 'create_post' %}">  Написати пост</a>
 <ul>
     {% for post in posts %}
-    <li><a href="{% url 'profile' user.id %}">
-        {{ post.created_by }}<a>
-        <p>
+    <li>
+        {{ post.created_by }}<p>
         {{ post.desk }} </p><p>
-        {{post.created_at}},        
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Create post</button>
-          </form>
+        {{post.created_at}},
 </p></li>
     {% endfor %}
 </ul>

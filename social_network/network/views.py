@@ -1,21 +1,68 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User, Chat, Publication, Message, UserData
 from .forms import *
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout, authenticate, login   
 
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()  # Сохраняем пользователя в базе данных
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Аккаунт для {username} был успешно создан!')
+            return redirect('login')  # Перенаправляем пользователя на страницу входа
+        else:
+            messages.error(request, 'Исправьте ошибки в форме регистрации.')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+
+@login_required
 def chat_list(request):
-    chats = Chat.objects.filter(Chat.members in request.user)
+    """Список чатов текущего пользователя"""
+    chats = request.user.chats.all()
     return render(request, 'chat_list.html', {'chats': chats})
 
+@login_required
+def chat_detail(request, chat_id):
+    """Детали чата с сообщениями"""
+    chat = get_object_or_404(Chat, id=chat_id)
+    messages = chat.messages.all().order_by('timestamp')
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.chat = chat
+            message.user = request.user
+            message.save()
+            return redirect('chat_detail', chat_id=chat.id)
+    else:
+        form = MessageForm()
+
+    return render(request, 'chat_detail.html', {'chat': chat, 'messages': messages, 'form': form})
+
+
+@login_required
 def create_chat(request):
+    """Создать новый чат"""
     if request.method == 'POST':
         form = ChatForm(request.POST)
         if form.is_valid():
             chat = form.save(commit=False)
             chat.save()
-            return redirect('chat_detail', chat_id=chat.id)
+            form.save_m2m()  # Сохранение ManyToMany поля
+            return redirect('chat_list')
     else:
         form = ChatForm()
-    
+
     return render(request, 'create_chat.html', {'form': form})
 
 
@@ -73,27 +120,25 @@ def create_post(request):
 
 
 
-def chat(request, chat_id):
-    chat = get_object_or_404(Chat, id=chat_id)
-    messages = Message.objects.filter(chat=chat)
-    form = MessageForm()
-    print(chat)
-    if request.method == 'POST':
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.chat = chat
-            message.user = request.user
-            message.save()
-            return redirect('chat_detail', chat_id=chat.id,)
-    is_moderator_or_admin = False
 
-    return render(request, 'chat_detail.html', {
-        'chat': chat,
-        'messages': messages,
-        'form': form,
-        'members': chat.members.all(),
-    })
+def logout_view(request):
+    logout(request)  # Выход из системы
+    messages.success(request, 'Вы успешно вышли из системы.')
+    return redirect('post_list')  # Перенаправляем на страницу входа
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)  # Проверка пользователя
+        if user is not None:
+            login(request, user)  # Вход пользователя в систему
+            messages.success(request, 'Вы успешно вошли в систему.')
+            return redirect('post_list')  # Перенаправляем на главную страницу или другую целевую страницу
+        else:
+            messages.error(request, 'Неверное имя пользователя или пароль.')
+    return render(request, 'login.html')
+
 
 
 
@@ -113,6 +158,6 @@ def profile(request, user_id):
 
 
 def post_list(request):
-    posts = Publication.objects.all()
+    posts = Publication.objects.all().order_by('-created_at')
     print("sas")
     return render(request, 'post_list.html', {'posts': posts})

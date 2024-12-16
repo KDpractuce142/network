@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{ chat.name }}</h1>
-  <h3>members: 
-        <p>{{ chat.members }}</p>
-</h3>
-  <h2>Comments</h2>
-  <ul>
+<h1>{{ chat.name }}</h1>
+  
+<ul>
+  {% for user in chat.members.all %}
+      <li><strong>{{ user.username }}</strong></li>
+  {% empty %}
+      <li>Тут нічого</li>
+  {% endfor %}
+</ul>
+
+<ul>
     {% for message in messages %}
-      <li>
-        <strong>{{ message.created_by.username }}</strong>: {{ message.desk }}
-      </li>
+        <li><strong>{{ message.user.username }}</strong>: {{ message.content }}</li>
+    {% empty %}
+        <li>Тут нічого</li>
     {% endfor %}
-  </ul>
-  <form method="post">
+</ul>
+
+<form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">send</button>
-  </form>
+    <button type="submit">Надіслати</button>
+</form>
 {% endblock %}
